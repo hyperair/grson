@@ -1,0 +1,27 @@
+#!/usr/bin/python3
+
+from itertools import count
+import json
+import sys
+
+fmt = '{key} = {value}'
+
+def dump_obj(prefix, obj):
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            if prefix:
+                k = prefix + '.' + k
+
+            dump_obj(k, v)
+
+    elif isinstance(obj, list):
+        for i, v in zip(count(), obj):
+            if prefix:
+                k = "{prefix}[{idx}]".format(prefix=prefix, idx=i)
+            dump_obj(k, v)
+
+    else:
+        print(fmt.format(key=prefix, value=json.dumps(obj)))
+
+obj = json.loads(sys.stdin.read())
+dump_obj('this', obj)
