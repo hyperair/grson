@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 
-from itertools import count
 import json
 import sys
 
@@ -15,7 +14,7 @@ def dump_obj(prefix, obj):
             dump_obj(k, v)
 
     elif isinstance(obj, list):
-        for i, v in zip(count(), obj):
+        for i, v in enumerate(obj):
             if prefix:
                 k = "{prefix}[{idx}]".format(prefix=prefix, idx=i)
             dump_obj(k, v)
