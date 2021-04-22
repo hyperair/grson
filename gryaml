@@ -1,0 +1,33 @@
+#!/usr/bin/python3
+
+import json
+import sys
+import yaml
+
+fmt = '{key} = {value}'
+
+def dump_obj(prefix, obj):
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            if prefix:
+                k = prefix + '.' + k
+
+            dump_obj(k, v)
+
+    elif isinstance(obj, list):
+        for i, v in enumerate(obj):
+            if prefix:
+                k = "{prefix}[{idx}]".format(prefix=prefix, idx=i)
+            dump_obj(k, v)
+
+    else:
+        print(fmt.format(key=prefix, value=json.dumps(obj)))
+
+objs = yaml.safe_load_all(sys.stdin)
+first = True
+for obj in objs:
+    if not first:
+        print('---')
+
+    dump_obj('this', obj)
+    first = False
